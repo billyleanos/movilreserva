@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class SignInPage2 extends StatelessWidget {
-  const SignInPage2({Key? key}) : super(key: key);
+class LoginPage extends StatelessWidget {
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +46,7 @@ class _Logo extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Text(
-            "Welcome to Flutter!",
+            "Aplicación de reserva - Bienvenido",
             textAlign: TextAlign.center,
             style: isSmallScreen
                 ? Theme.of(context).textTheme.headline5
@@ -88,21 +88,21 @@ class __FormContentState extends State<_FormContent> {
               validator: (value) {
                 // add email validation
                 if (value == null || value.isEmpty) {
-                  return 'Please enter some text';
+                  return 'Por favor, insira um email válido';
                 }
 
                 bool emailValid = RegExp(
                         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                     .hasMatch(value);
                 if (!emailValid) {
-                  return 'Please enter a valid email';
+                  return 'Por favor, insira um email válido';
                 }
 
                 return null;
               },
               decoration: const InputDecoration(
                 labelText: 'Email',
-                hintText: 'Enter your email',
+                hintText: 'Ingresa tu email',
                 prefixIcon: Icon(Icons.email_outlined),
                 border: OutlineInputBorder(),
               ),
@@ -111,7 +111,7 @@ class __FormContentState extends State<_FormContent> {
             TextFormField(
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please enter some text';
+                  return 'Por favor, ingresa tu contraseña';
                 }
 
                 if (value.length < 6) {
@@ -121,8 +121,8 @@ class __FormContentState extends State<_FormContent> {
               },
               obscureText: !_isPasswordVisible,
               decoration: InputDecoration(
-                  labelText: 'Password',
-                  hintText: 'Enter your password',
+                  labelText: 'Contraseña',
+                  hintText: 'Ingresa tu contraseña',
                   prefixIcon: const Icon(Icons.lock_outline_rounded),
                   border: const OutlineInputBorder(),
                   suffixIcon: IconButton(
@@ -145,7 +145,7 @@ class __FormContentState extends State<_FormContent> {
                   _rememberMe = value;
                 });
               },
-              title: const Text('Remember me'),
+              title: const Text('Recuerdame'),
               controlAffinity: ListTileControlAffinity.leading,
               dense: true,
               contentPadding: const EdgeInsets.all(0),
@@ -155,19 +155,42 @@ class __FormContentState extends State<_FormContent> {
               width: double.infinity,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
+                  backgroundColor: Color.fromRGBO(104, 207, 1, 1),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(4)),
                 ),
                 child: const Padding(
                   padding: EdgeInsets.all(10.0),
                   child: Text(
-                    'Sign in',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    'Iniciar sesión',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
                   ),
                 ),
                 onPressed: () {
                   if (_formKey.currentState?.validate() ?? false) {
-                    /// do something
+                    /// Hacer algo aqui
+                  }
+                },
+              ),
+            ),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color.fromRGBO(54, 85, 239, 1),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4)),
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Text(
+                    'Registrarse',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                  ),
+                ),
+                onPressed: () {
+                  if (_formKey.currentState?.validate() ?? false) {
+                    /// Hacer algo aqui
                   }
                 },
               ),
