@@ -1,3 +1,4 @@
+import 'package:app_reservas/views/calendrio_page.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
@@ -163,12 +164,21 @@ class __FormContentState extends State<_FormContent> {
                   padding: EdgeInsets.all(10.0),
                   child: Text(
                     'Iniciar sesión',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
                   ),
                 ),
                 onPressed: () {
                   if (_formKey.currentState?.validate() ?? false) {
                     /// Hacer algo aqui
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TableEventsExample(),
+                        ),
+                        (Route<dynamic> route) => false);
                   }
                 },
               ),
@@ -185,7 +195,10 @@ class __FormContentState extends State<_FormContent> {
                   padding: EdgeInsets.all(10.0),
                   child: Text(
                     'Registrarse',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
                   ),
                 ),
                 onPressed: () {
