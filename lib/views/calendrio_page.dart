@@ -1,13 +1,13 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
+import 'package:app_reservas/views/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../utils/utils.dart';
 
-
-const List<String> list = <String>['One', 'Two', 'Three', 'Four'];
+const List<String> list = <String>['Sala A', 'Sala B'];
 
 class TableEventsExample extends StatefulWidget {
   @override
@@ -51,7 +51,6 @@ class _TableEventsExampleState extends State<TableEventsExample> {
       for (final d in days) ..._getEventsForDay(d),
     ];
   }
-  
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     if (!isSameDay(_selectedDay, selectedDay)) {
@@ -85,7 +84,7 @@ class _TableEventsExampleState extends State<TableEventsExample> {
       _selectedEvents.value = _getEventsForDay(end);
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,9 +92,28 @@ class _TableEventsExampleState extends State<TableEventsExample> {
         title: Text('TableCalendar - Events'),
       ),
       body: Column(
-
         children: [
-         _ListaSala(),
+          Flex(direction: Axis.horizontal, children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal:
+                        8.0), // Ajusta el valor de padding según sea necesario
+                child: _ListaSala(),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal:
+                        8.0), // Ajusta el valor de padding según sea necesario
+                child: _BotonMostar(),
+              ),
+            ),
+          ]),
+
+          //  _ListaSala(),
+          //  _BotonMostar(),
           TableCalendar<Event>(
             firstDay: kFirstDay,
             lastDay: kLastDay,
@@ -151,34 +169,59 @@ class _TableEventsExampleState extends State<TableEventsExample> {
               },
             ),
           ),
+          _AgregarEventoButton(),
         ],
       ),
     );
   }
-  
+
   String dropdownValue = list.first;
-  Widget _ListaSala(){
-    return DropdownButton<String>(
-      value: dropdownValue,
-      icon: const Icon(Icons.arrow_downward),
-      elevation: 16,
-      style: const TextStyle(color: Colors.deepPurple),
-      underline: Container(
-        height: 2,
-        color: Colors.deepPurpleAccent,
-      ),
-      onChanged: (String? value) {
+  Widget _ListaSala() {
+    return DropdownMenu<String>(
+      initialSelection: list.first,
+      onSelected: (String? value) {
         // This is called when the user selects an item.
         setState(() {
           dropdownValue = value!;
         });
       },
-      items: list.map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
+      dropdownMenuEntries: list.map<DropdownMenuEntry<String>>((String value) {
+        return DropdownMenuEntry<String>(value: value, label: value);
       }).toList(),
+    );
+  }
+
+  Widget _BotonMostar() {
+    return ElevatedButton(
+      onPressed: () {
+        // Respond to button press
+      },
+      child: const Text('Mostar'),
+    );
+  }
+
+  Widget _AgregarEventoButton() {
+    return Align(
+      alignment: Alignment.bottomRight,
+      child: Padding(
+        padding:
+            const EdgeInsets.all(16.0), // Ajusta el padding según sea necesario
+        child: FloatingActionButton(
+          
+          child: Icon(Icons.add, color: Color.fromARGB(255, 255, 255, 255)),
+          backgroundColor: Color.fromARGB(255, 111, 221, 0),
+          
+          onPressed: () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => LoginPage(),
+              ),
+              (Route<dynamic> route) => false,
+            );
+          },
+        ),
+      ),
     );
   }
 }
