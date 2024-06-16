@@ -1,6 +1,7 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
+import 'package:app_reservas/views/cargando_page.dart';
 import 'package:app_reservas/views/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -16,6 +17,7 @@ class TableEventsExample extends StatefulWidget {
 
 class _TableEventsExampleState extends State<TableEventsExample> {
   late final ValueNotifier<List<Event>> _selectedEvents;
+  bool _isLoading = true;
   CalendarFormat _calendarFormat = CalendarFormat.month;
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode
       .toggledOff; // Can be toggled on/off by longpressing a date
@@ -27,9 +29,21 @@ class _TableEventsExampleState extends State<TableEventsExample> {
   @override
   void initState() {
     super.initState();
-
+    _loadEvents();
     _selectedDay = _focusedDay;
     _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
+  }
+
+  Future<void> _loadEvents() async {
+    try {
+      await cargarReservasApi();
+    } catch (e) {
+      print(e);
+    }finally{
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -87,11 +101,12 @@ class _TableEventsExampleState extends State<TableEventsExample> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return _isLoading? ProgressIndicatorApp(): Scaffold(
       appBar: AppBar(
-        title: Text('TableCalendar - Events'),
+        title: Text('Reservas de salas'),
       ),
-      body: Column(
+      body: 
+      Column(
         children: [
           Flex(direction: Axis.horizontal, children: [
             Expanded(
@@ -114,6 +129,7 @@ class _TableEventsExampleState extends State<TableEventsExample> {
 
           //  _ListaSala(),
           //  _BotonMostar(),
+          
           TableCalendar<Event>(
             firstDay: kFirstDay,
             lastDay: kLastDay,
@@ -159,10 +175,10 @@ class _TableEventsExampleState extends State<TableEventsExample> {
                         border: Border.all(),
                         borderRadius: BorderRadius.circular(12.0),
                       ),
-                      child: ListTile(
-                        onTap: () => print('${value[index]}'),
-                        title: Text('${value[index]}'),
-                      ),
+                      child: (ListTile(
+                        title: Text(value[index].title),
+                        subtitle: Text(value[index].description),
+                      )),
                     );
                   },
                 );
@@ -207,10 +223,8 @@ class _TableEventsExampleState extends State<TableEventsExample> {
         padding:
             const EdgeInsets.all(16.0), // Ajusta el padding según sea necesario
         child: FloatingActionButton(
-          
           child: Icon(Icons.add, color: Color.fromARGB(255, 255, 255, 255)),
           backgroundColor: Color.fromARGB(255, 111, 221, 0),
-          
           onPressed: () {
             Navigator.pushAndRemoveUntil(
               context,
