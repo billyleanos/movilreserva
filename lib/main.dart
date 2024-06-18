@@ -86,8 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
       routes: {
         'login': (BuildContext context) => const LoginPage(),
         // 'register': (BuildContext context) => const RegisterPage(),
-
       },
-    ); 
+    );
   }
 }

@@ -5,6 +5,7 @@ import 'package:app_reservas/views/cargando_page.dart';
 import 'package:app_reservas/views/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:app_reservas/views/register_page.dart';
 
 import '../utils/utils.dart';
 
@@ -39,7 +40,7 @@ class _TableEventsExampleState extends State<TableEventsExample> {
       await cargarReservasApi();
     } catch (e) {
       print(e);
-    }finally{
+    } finally {
       setState(() {
         _isLoading = false;
       });
@@ -101,94 +102,95 @@ class _TableEventsExampleState extends State<TableEventsExample> {
 
   @override
   Widget build(BuildContext context) {
-    return _isLoading? ProgressIndicatorApp(): Scaffold(
-      appBar: AppBar(
-        title: Text('Reservas de salas'),
-      ),
-      body: 
-      Column(
-        children: [
-          Flex(direction: Axis.horizontal, children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal:
-                        8.0), // Ajusta el valor de padding según sea necesario
-                child: _ListaSala(),
-              ),
+    return _isLoading
+        ? ProgressIndicatorApp()
+        : Scaffold(
+            appBar: AppBar(
+              title: Text('Reservas de salas'),
             ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal:
-                        8.0), // Ajusta el valor de padding según sea necesario
-                child: _BotonMostar(),
-              ),
-            ),
-          ]),
+            body: Column(
+              children: [
+                Flex(direction: Axis.horizontal, children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal:
+                              8.0), // Ajusta el valor de padding según sea necesario
+                      child: _ListaSala(),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal:
+                              8.0), // Ajusta el valor de padding según sea necesario
+                      child: _BotonMostar(),
+                    ),
+                  ),
+                ]),
 
-          //  _ListaSala(),
-          //  _BotonMostar(),
-          
-          TableCalendar<Event>(
-            firstDay: kFirstDay,
-            lastDay: kLastDay,
-            focusedDay: _focusedDay,
-            selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-            rangeStartDay: _rangeStart,
-            rangeEndDay: _rangeEnd,
-            calendarFormat: _calendarFormat,
-            rangeSelectionMode: _rangeSelectionMode,
-            eventLoader: _getEventsForDay,
-            startingDayOfWeek: StartingDayOfWeek.monday,
-            calendarStyle: CalendarStyle(
-              // Use `CalendarStyle` to customize the UI
-              outsideDaysVisible: false,
-            ),
-            onDaySelected: _onDaySelected,
-            onRangeSelected: _onRangeSelected,
-            onFormatChanged: (format) {
-              if (_calendarFormat != format) {
-                setState(() {
-                  _calendarFormat = format;
-                });
-              }
-            },
-            onPageChanged: (focusedDay) {
-              _focusedDay = focusedDay;
-            },
-          ),
-          const SizedBox(height: 8.0),
-          Expanded(
-            child: ValueListenableBuilder<List<Event>>(
-              valueListenable: _selectedEvents,
-              builder: (context, value, _) {
-                return ListView.builder(
-                  itemCount: value.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 12.0,
-                        vertical: 4.0,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(),
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                      child: (ListTile(
-                        title: Text(value[index].title),
-                        subtitle: Text(value[index].description),
-                      )),
-                    );
+                //  _ListaSala(),
+                //  _BotonMostar(),
+
+                TableCalendar<Event>(
+                  firstDay: kFirstDay,
+                  lastDay: kLastDay,
+                  focusedDay: _focusedDay,
+                  selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+                  rangeStartDay: _rangeStart,
+                  rangeEndDay: _rangeEnd,
+                  calendarFormat: _calendarFormat,
+                  rangeSelectionMode: _rangeSelectionMode,
+                  eventLoader: _getEventsForDay,
+                  startingDayOfWeek: StartingDayOfWeek.monday,
+                  calendarStyle: CalendarStyle(
+                    // Use `CalendarStyle` to customize the UI
+                    outsideDaysVisible: false,
+                  ),
+                  onDaySelected: _onDaySelected,
+                  onRangeSelected: _onRangeSelected,
+                  onFormatChanged: (format) {
+                    if (_calendarFormat != format) {
+                      setState(() {
+                        _calendarFormat = format;
+                      });
+                    }
                   },
-                );
-              },
+                  onPageChanged: (focusedDay) {
+                    _focusedDay = focusedDay;
+                  },
+                ),
+                const SizedBox(height: 8.0),
+                Expanded(
+                  child: ValueListenableBuilder<List<Event>>(
+                    valueListenable: _selectedEvents,
+                    builder: (context, value, _) {
+                      return ListView.builder(
+                        itemCount: value.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            margin: const EdgeInsets.symmetric(
+                              horizontal: 12.0,
+                              vertical: 4.0,
+                            ),
+                            decoration: BoxDecoration(
+                              border: Border.all(),
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            child: (ListTile(
+                              title: Text(value[index].title),
+                              subtitle: Text(value[index].description),
+                            )),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ),
+                _AgregarEventoButton(),
+              ],
             ),
-          ),
-          _AgregarEventoButton(),
-        ],
-      ),
-    );
+          );
   }
 
   String dropdownValue = list.first;
@@ -220,18 +222,14 @@ class _TableEventsExampleState extends State<TableEventsExample> {
     return Align(
       alignment: Alignment.bottomRight,
       child: Padding(
-        padding:
-            const EdgeInsets.all(16.0), // Ajusta el padding según sea necesario
+        padding: const EdgeInsets.all(16.0),
         child: FloatingActionButton(
           child: Icon(Icons.add, color: Color.fromARGB(255, 255, 255, 255)),
-          backgroundColor: Color.fromARGB(255, 111, 221, 0),
+          backgroundColor: Color.fromARGB(255, 35, 25, 93),
           onPressed: () {
-            Navigator.pushAndRemoveUntil(
+            Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (context) => LoginPage(),
-              ),
-              (Route<dynamic> route) => false,
+              MaterialPageRoute(builder: (context) => NuevaReservaPage()),
             );
           },
         ),
