@@ -1,3 +1,4 @@
+import 'package:app_reservas/api/login.dart';
 import 'package:app_reservas/views/calendrio_page.dart';
 import 'package:flutter/material.dart';
 
@@ -73,8 +74,11 @@ class __FormContentState extends State<_FormContent> {
   bool _isPasswordVisible = false;
   bool _rememberMe = false;
 
+  //instancia de la clase loginService
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
+  final LoginService _loginService = LoginService();
+  final TextEditingController _correo = TextEditingController();
+  final TextEditingController _password = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -86,6 +90,7 @@ class __FormContentState extends State<_FormContent> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextFormField(
+              controller: _correo,
               validator: (value) {
                 // add email validation
                 if (value == null || value.isEmpty) {
@@ -110,6 +115,7 @@ class __FormContentState extends State<_FormContent> {
             ),
             _gap(),
             TextFormField(
+              controller: _password,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Por favor, ingresa tu contraseña';
@@ -170,15 +176,28 @@ class __FormContentState extends State<_FormContent> {
                         color: Colors.white),
                   ),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState?.validate() ?? false) {
                     /// Hacer algo aqui
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => TableEventsExample(),
+                    final respuesta =
+                        await _loginService.login(_correo.text, _password.text);
+                    if (respuesta != null && respuesta.containsKey('id_usuario')) {
+                      print(respuesta);
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TableEventsExample(),
+                          ),
+                          (Route<dynamic> route) => false);
+                    } else {
+                      
+                      
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Credenciales incorrectas'),
                         ),
-                        (Route<dynamic> route) => false);
+                      );
+                    }
                   }
                 },
               ),
